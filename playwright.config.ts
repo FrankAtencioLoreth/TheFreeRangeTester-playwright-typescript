@@ -26,7 +26,8 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'https://www.freerangetesters.com/',
+    headless: false,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -35,39 +36,34 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      testMatch: '/actions.spec.ts',
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
 
     {
+      testMatch: '/actions.spec.ts',
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
 
     {
+      testMatch: '/actions.spec.ts',
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
 
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
+    {
+      name: 'api testing',
+      testMatch: '/apiTest/**/*',
+      use: {
+        baseURL: 'https://api.github.com/',
+        extraHTTPHeaders: {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `token ${process.env.API_TOKEN_GITHUB}`
+        }
+      }
+    }
   ],
 
   /* Run your local dev server before starting the tests */
